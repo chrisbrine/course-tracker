@@ -1,0 +1,22 @@
+section.flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+section.flex .row-flex-item {
+  margin: 10px 50px;
+}
+
+section.flex .row-flex-item .mat-mdc-form-field {
+  width: 40vw;
+  min-width: 300px;
+}
+
+.mat-icon.mat-primary {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+}
+
+

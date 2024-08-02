@@ -1,0 +1,39 @@
+<section>
+  <section class="row flex">
+    <div class="row-flex-item">
+      <button mat-fab extended color="primary" (click)="addCourse()" [disabled]="editor">Add New Course</button>
+    </div>
+    <div class="row-flex-item">
+      <mat-form-field appearance="outline">
+        <mat-label>Search</mat-label>
+        <input matInput (keyup)="onSearch($event)" placeholder="Placeholder" [disabled]="editor">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+  </section>
+  <app-list-table
+    [page]="page"
+    [search]="search"
+    [loadedCounts]="loaded"
+    (Loaded)="hasLoadedClasses($event)"
+    (EditCourse)="updateCourse($event)"
+    (DeleteCourse)="deleteCourse($event)"
+    *ngIf="loaded && !editCourse"
+  ></app-list-table>
+  <app-list-pagination
+    [page]="page"
+    [pages]="pages"
+    [limit]="limit"
+    [count]="count"
+    [loaded]="loaded && loadedClasses"
+    (PageChange)="onPageChange($event)"
+    *ngIf="loaded && loadedClasses && !editCourse"
+  ></app-list-pagination>
+  <mat-spinner *ngIf="!loaded && !loadedClasses"></mat-spinner>
+  <app-edit
+    [course]="editCourse"
+    *ngIf="editCourse"
+    (Save)="cancelCourse()"
+    (Cancel)="cancelCourse()"
+  ></app-edit>
+</section>

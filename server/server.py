@@ -11,66 +11,119 @@
 # POST /courses will add a course
 # DELETE /courses/<id> will delete the course with the given id
 
-from flask import Flask, request, jsonify, app
+import os
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from server.database import Database
 from server.config import Config
+from server.countryCodes import CountryCodes
+
+db = None
+config = None
+sort_by = None
+countryCodes = None
+app = Flask(__name__)
+
+# get main directory
+directory = __file__.split("/")
+directory.pop()
+directory.pop()
+directory = "/".join(directory)
+web_directory = directory + "/dist/course-tracker/browser"
+
+CORS(app)
+
+def count_json(count):
+    per_page = config.pages()
+    pages = count // per_page
+    if count % per_page != 0:
+        pages += 1
+    return {"count": count, "limit": per_page, "pages": pages}
+
+def handle_data(data):
+    json_data = jsonify(data)
+    # json_data.headers.add('Access-Control-Allow-Origin', '*')
+    # json_data.headers.add('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT')
+    return json_data
+
+@app.route('/page', methods=['GET'])
+def pages():
+    print("Getting pages...")
+    count = db.number_of_pages()
+    json_data = count_json(count)
+    return handle_data(json_data)
+
+@app.route('/page/<page_number>', methods=['GET'])
+def page(page_number):
+    print("Getting page " + page_number + "...")
+    data = db.page(int(page_number), config.pages(), sort_by)
+    return handle_data(data)
+
+@app.route('/search/<query>', methods=['GET'])
+def search(query):
+    count = db.search(query)
+    json_data = count_json(count)
+    return handle_data(json_data)
+
+@app.route('/search/<query>/<page_number>', methods=['GET'])
+def search_page(query, page_number):
+    data = db.search_page(query, int(page_number), config.pages(), sort_by)
+    return handle_data(data)
+
+@app.route('/add', methods=['POST'])
+def add():
+    data = request.json
+    success = db.add(data)
+    return handle_data({"success": success})
+
+@app.route('/update/<id>', methods=['POST'])
+def update(id):
+    data = request.json
+    success = db.update(id, data)
+    print("Updated: " + str(success))
+    print(data)
+    print(id)
+    return handle_data({"success": success})
+
+@app.route('/delete/<id>', methods=['POST'])
+def delete(id):
+    print("Deleting: " + id)
+    db.delete(id)
+    return handle_data({"success": True})
+
+@app.route('/countryCodes', methods=['GET'])
+def country_codes():
+    data = countryCodes.all()
+    return handle_data({"success": data != None, "data": data})
+
+@app.route('/countryCodes/<code>', methods=['GET'])
+def country_code(code):
+    data = countryCodes.get(code)
+    return handle_data({"success": data != None, "data": data})
+
+@app.route('/autocomplete/<field>/<query>', methods=['GET'])
+def autocomplete(field, query):
+    data = db.autocomplete(field, query)
+    return handle_data({"success": data != None, "data": data})
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def home(path):
+    if path == "":
+        path = "index.html"
+    print("Sending static file: " + path)
+    return send_from_directory(web_directory, path)
 
 class Server:
     def __init__(self):
-        self.db = Database()
-        self.sort_by = "_id"
-        self.config = Config()
-        self.app = Flask(__name__)
-        # self.app.add_url_rule('/courses', 'courses', self.pages, methods=['GET'])
-        # self.app.add_url_rule('/courses/<page_number>', 'course', self.page, methods=['GET'])
-        # self.app.add_url_rule('/search/<query>', 'search', self.search, methods=['GET'])
-        # self.app.add_url_rule('/search/<query>/<page_number>', 'search_page', self.search_page, methods=['GET'])
-        # self.app.add_url_rule('/courses', 'add_course', self.add, methods=['POST'])
-        # self.app.add_url_rule('/courses/<course_id>', 'update', self.update, methods=['POST'])
-        # self.app.add_url_rule('/courses/<course_id>', 'delete', self.delete, methods=['DELETE'])
+        print("Server is setting up...")
+        global db, config, sort_by, countryCodes
+        db = Database()
+        sort_by = "_id"
+        config = Config()
+        countryCodes = CountryCodes()
+        self.port = config.port()
 
-    def count_json(self, count):
-        per_page = self.config.pages()
-        pages = count // per_page
-        if count % per_page != 0:
-            pages += 1
-        return {"count": count, "per_page": per_page, "pages": pages}
-
-    @app.route('/page', methods=['GET'])
-    def pages(self):
-        count = self.db.number_of_pages()
-        json_data = self.count_json(count)
-        return jsonify(json_data)
-
-    @app.route('/page/<page_number>', methods=['GET'])
-    def page(self, page_number):
-        data = self.db.page(page_number, self.config.pages(), self.sort_by)
-        return jsonify(data)
-
-    @app.route('/search/<query>', methods=['GET'])
-    def search(self, query):
-        count = self.db.search(query)
-        json_data = self.count_json(count)
-        return jsonify(json_data)
-
-    @app.route('/search/<query>/<page_number>', methods=['GET'])
-    def search_page(self, query, page_number):
-        data = self.db.search_page(query, page_number, self.config.pages(), self.sort_by)
-        return jsonify(data)
-
-    @app.route('/item', methods=['POST'])
-    def add(self):
-        data = request.json
-        success = self.db.add(data)
-        return jsonify({"success": success})
-
-    @app.route('/item/<id>', methods=['POST'])
-    def update(self, id):
-        data = request.json
-        success = self.db.update(id, data)
-        return jsonify({"success": success})
-
-    @app.route('/item/<id>', methods=['DELETE'])
-    def delete(self, id):
-        self.db.delete(id)
-        return jsonify({"success": True})
+    def run(self):
+        app.run(port=self.port)
+        print("Server has started...")

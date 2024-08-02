@@ -1,3 +1,5 @@
-from server.database import Database
+from server.server import Server
 
-db = Database()
+server = Server()
+
+server.run()

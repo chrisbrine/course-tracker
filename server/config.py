@@ -3,6 +3,12 @@ import os, dotenv
 class Config:
     def __init__(self):
         dotenv.load_dotenv()
+    def port(self):
+        # if not set, default to 3000
+        port = os.getenv('UNIVERSITY_APP_PORT')
+        if port == None:
+            return 3000
+        return int(port)
     def pages(self):
         # if not set, default to 10
         pages = os.getenv('UNIVERSITY_PAGES')

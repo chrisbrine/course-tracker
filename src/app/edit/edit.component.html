@@ -1,0 +1,110 @@
+<section className="editor-overlay-container" *ngIf="course !== null">
+  <div className="editor-overlay-outside">
+    <div className="editor-overlay">
+      <h1>{{ title }}</h1>
+      <mat-form-field appearance="outline" class="editor-field">
+        <mat-label>Course Name</mat-label>
+        <input
+          matInput
+          (keyup)="setField('CourseName', $event)"
+          [matAutocomplete]="courseNameAuto"
+          [disabled]="editing"
+          placeholder="Course Name"
+          value="{{ course.CourseName }}"
+        />
+        <mat-autocomplete #courseNameAuto="matAutocomplete">
+          @for (option of autocompleteOptions['CourseName']; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="editor-field">
+        <mat-label>University</mat-label>
+        <input
+          matInput
+          (keyup)="setField('University', $event)"
+          [matAutocomplete]="universityAuto"
+          [disabled]="editing"
+          placeholder="University"
+          value="{{ course.University }}"
+        />
+        <mat-autocomplete #universityAuto="matAutocomplete">
+          @for (option of autocompleteOptions['University']; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="editor-field">
+        <mat-label>Country</mat-label>
+        <input
+          matInput
+          (keyup)="setField('Country', $event)"
+          [matAutocomplete]="countryAuto"
+          [disabled]="editing"
+          placeholder="Country"
+          value="{{ course.Country }}"
+        />
+        <mat-autocomplete #countryAuto="matAutocomplete">
+          @for (option of autocompleteOptions['Country']; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="editor-field">
+        <mat-label>City</mat-label>
+        <input
+          matInput
+          (keyup)="setField('City', $event)"
+          [matAutocomplete]="cityAuto"
+          [disabled]="editing"
+          placeholder="City"
+          value="{{ course.City }}"
+        />
+        <mat-autocomplete #cityAuto="matAutocomplete">
+          @for (option of autocompleteOptions['City']; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="editor-field">
+        <mat-label>Currency</mat-label>
+        <mat-select [(value)]="currency" (selectionChange)="setCurrency($event)">
+          @for (currencyCode of currencyCodes; track currencyCode) {
+            <mat-option value="{{ currencyCode }}">{{ currencyCode }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="editor-field">
+        <mat-label>Price</mat-label>
+        <input matInput placeholder="Price" value="{{ course.Price }}" (change)="setField('Price', $event)" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="editor-field">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="pickerStartDate" value="{{ startDate }}" (dateChange)="setField('StartDate', $event)">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
+        <mat-datepicker #pickerStartDate></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="editor-field">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="pickerEndDate" value="{{ endDate }}" (dateChange)="setField('EndDate', $event)">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEndDate></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="editor-field">
+        <textarea matInput #CourseDescription (keyup)="setField('CourseDescription', $event)">{{ course ? course.CourseDescription : '' }}</textarea>
+      </mat-form-field>
+      <!-- if error has and object keys then show every error -->
+      <div class="editor-errors" *ngIf="errorLabels.length > 0">
+        @for (err of errorLabels; track err) {
+          <div class="editor-error">{{ error[err] }}</div>
+        }
+      </div>
+      <div class="editor-buttons">
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="saving">Save</button>
+        <button mat-raised-button color="warn" (click)="Cancel.emit()" [disabled]="saving">Cancel</button>
+      </div>
+    </div>
+  </div>
+</section>

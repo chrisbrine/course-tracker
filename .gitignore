@@ -1,5 +1,15 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
+# python
+/server/__pycache__/
+server/__pycache__/
+/server/__pycache__/*
+server/__pycache__/*
+/__pycache__/
+__pycache__/
+__pycache__/*
+__pycache__
+
 # Compiled output
 /dist
 /tmp
@@ -13,6 +23,7 @@ yarn-error.log
 
 # IDEs and editors
 .idea/
+/.vscode/
 .project
 .classpath
 .c9/

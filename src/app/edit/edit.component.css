@@ -1,0 +1,23 @@
+mat-form-field.editor-field {
+  width: calc(100% - 60px);
+  margin: 0 30px;
+}
+
+.editor-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 20px 30px;
+}
+
+.editor-buttons button {
+  margin: 0 10px;
+}
+
+.editor-errors {
+  color: red;
+  margin: 0 30px;
+}
+
+.editor-errors .editor-error {
+  margin: 5px 0;
+}

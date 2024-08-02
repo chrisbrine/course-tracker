@@ -1,0 +1,9 @@
+<!-- Pagination -->
+
+<div class="pagination" *ngIf="loaded">
+  <button (click)="goToPage(1)" [disabled]="pagesArray[0] === 1">&lt;&lt;</button>
+  <button (click)="goToPage(page - 1)" [disabled]="page === 1">&lt;</button>
+  <button *ngFor="let curPage of pagesArray" (click)="goToPage(curPage)" [class.active]="curPage === page">{{ curPage }}</button>
+  <button (click)="goToPage(page + 1)" [disabled]="page === pages">&gt;</button>
+  <button (click)="goToPage(pages)" [disabled]="pagesArray[pagesArray.length - 1] === pages">&gt;&gt;</button>
+</div>

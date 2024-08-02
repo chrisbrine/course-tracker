@@ -1,0 +1,20 @@
+.pagination {
+  margin: 20px 5px;
+}
+
+.pagination button {
+  background-color: white;
+  color: #1527ea;
+  border: 1px solid grey;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.pagination button:disabled {
+  color: lightgrey;
+  cursor: not-allowed;
+}
+.pagination button.active {
+  background-color: #1527ea;
+  color: white;
+  cursor: default;
+}

@@ -1,0 +1,49 @@
+<table mat-table [dataSource]="courses" class="mat-elevation-z8" *ngIf="loaded">
+  <ng-container matColumnDef="CourseName">
+    <th mat-header-cell *matHeaderCellDef>Course Name</th>
+    <td mat-cell *matCellDef="let course">
+      <span mat-icon-button (click)="EditCourse.emit(course)" style="cursor: pointer">
+        <mat-icon color="primary">edit_square</mat-icon>
+      </span>
+      <span mat-icon-button (click)="DeleteCourse.emit(course._id)" style="cursor: pointer">
+        <mat-icon color="primary">close</mat-icon>
+      </span>
+      <span
+        matTooltip="{{ getTooltip(course) }}"
+        matTooltipPosition="above"
+        matTooltipClass="above">
+        {{ course.CourseName }}
+      </span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="Location">
+    <th mat-header-cell *matHeaderCellDef>Location</th>
+    <td
+      matTooltip="{{ getTooltip(course) }}"
+      matTooltipPosition="above"
+      matTooltipClass="above"
+      mat-cell
+      *matCellDef="let course">{{ getLocation(course) }}</td>
+  </ng-container>
+  <ng-container matColumnDef="StartDate">
+    <th mat-header-cell *matHeaderCellDef>Start</th>
+    <td mat-cell *matCellDef="let course">{{ getStartDate(course) }}</td>
+  </ng-container>
+  <ng-container matColumnDef="Length">
+    <th mat-header-cell *matHeaderCellDef>Length</th>
+    <td mat-cell *matCellDef="let course">{{ getLength(course) }}</td>
+  </ng-container>
+  <ng-container matColumnDef="Price">
+    <th mat-header-cell *matHeaderCellDef>Price</th>
+    <td mat-cell *matCellDef="let course">{{ getPrice(course) }}</td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <!-- when mouse over, add an active class -->
+  <tr mat-row *matRowDef="let row; columns: columns;"
+    (mouseover)="rowActive = row"
+    (mouseout)="rowActive = -1"
+    [ngClass]="{ 'active': rowActive === row }"
+  >
+
+  </tr>
+</table>
