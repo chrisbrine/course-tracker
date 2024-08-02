@@ -24,6 +24,11 @@ yarn-error.log
 # IDEs and editors
 .idea/
 /.vscode/
+.vscode
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
 .project
 .classpath
 .c9/
