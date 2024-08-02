@@ -1,27 +1,35 @@
 # CourseTracker
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.2.
+This project will track a given set of courses from a provided url.
 
-## Development server
+## Requirements
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Angular 17+
+- Python 3.10+
+- Node 20
 
-## Code scaffolding
+## Setting up
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Download the repository
+- run: npm install
+- run: npx build
+- run: pip install pymongo
 
-## Build
+## Configuration
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Create a .env file in the root directory with these settings:
 
-## Running unit tests
+* CSV_UNIVERSITY_URI=(the url to the CSV file)
+* UNIVERSITY_MONGO_DB_EXPIRE_SECONDS=(the amount of time, in seconds, for the data to expire)
+* UNIVERSITY_MONGO_DB_URI=(the mongo connection string)
+* UNIVERSITY_MONGO_DB_TABLE=(the table to use, not required)
+* UNIVERSITY_MONGO_DB_COLLECTION=(the collection to use, not required)
+* UNIVERSITY_PAGES=(limits to this number of pages, not required)
+* UNIVERSITY_APP_PORT=(the port to set it up on, defaults to 3000 not required)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Running the server
 
-## Running end-to-end tests
+To run the server you just need to run:
+* python main.py
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This will start the server and you can browse to the host on port 3000.
