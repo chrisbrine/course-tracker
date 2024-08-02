@@ -13,7 +13,7 @@
 
 import os
 from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
+# from flask_cors import CORS
 from server.database import Database
 from server.config import Config
 from server.countryCodes import CountryCodes
@@ -31,7 +31,7 @@ directory.pop()
 directory = "/".join(directory)
 web_directory = directory + "/dist/course-tracker/browser"
 
-CORS(app)
+# CORS(app)
 
 def count_json(count):
     per_page = config.pages()
@@ -42,7 +42,7 @@ def count_json(count):
 
 def handle_data(data):
     json_data = jsonify(data)
-    # json_data.headers.add('Access-Control-Allow-Origin', '*')
+    json_data.headers.add('Access-Control-Allow-Origin', '*')
     # json_data.headers.add('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT')
     return json_data
 
@@ -125,5 +125,5 @@ class Server:
         self.port = config.port()
 
     def run(self):
-        app.run(port=self.port)
+        app.run(port=self.port, host='0.0.0.0')
         print("Server has started...")

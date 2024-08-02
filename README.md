@@ -13,7 +13,7 @@ This project will track a given set of courses from a provided url.
 - Download the repository
 - run: npm install
 - run: npx build
-- run: pip install pymongo
+- run: pip install pymongo flask flask_cors python-dotenv bson pandas
 
 ## Configuration
 
@@ -30,6 +30,6 @@ Create a .env file in the root directory with these settings:
 ## Running the server
 
 To run the server you just need to run:
-* python main.py
+* python3 main.py
 
 This will start the server and you can browse to the host on port 3000.
